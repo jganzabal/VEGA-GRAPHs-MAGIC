@@ -1,0 +1,26 @@
+{
+  "name": "webpack-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^0.28.5",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.30.1",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.5.3"
+  },
+  "dependencies": {
+    "d3-time": "^1.0.7",
+    "jquery": "^3.2.1",
+    "vega": "^3.0.0",
+    "vega-tooltip": "^0.4.2"
+  }
+}

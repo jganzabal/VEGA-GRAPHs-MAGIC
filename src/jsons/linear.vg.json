@@ -1,0 +1,137 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v3.0.json",
+    "width": 400,
+    "height": 200,
+    "autosize": "fit",
+    "signals": [],
+
+    "data": [{
+        "name": "table",
+        "values": [{ "x": 0, "date": "Fri Aug 11 00:00:00 2017", "y": 471, "c": 0 }, { "x": 1, "date": "Thu Aug 10 00:00:00 2017", "y": 456, "c": 0 }, { "x": 2, "date": "Wed Aug  9 00:00:00 2017", "y": 484, "c": 0 }, { "x": 3, "date": "Tue Aug  8 00:00:00 2017", "y": 329, "c": 0 }, { "x": 4, "date": "Mon Aug  7 00:00:00 2017", "y": 212, "c": 0 }, { "x": 5, "date": "Sun Aug  6 00:00:00 2017", "y": 130, "c": 0 }, { "x": 6, "date": "Sat Aug  5 00:00:00 2017", "y": 131, "c": 0 }, { "x": 7, "date": "Fri Aug  4 00:00:00 2017", "y": 377, "c": 0 }, { "x": 8, "date": "Thu Aug  3 00:00:00 2017", "y": 477, "c": 0 }, { "x": 9, "date": "Wed Aug  2 00:00:00 2017", "y": 444, "c": 0 }, { "x": 10, "date": "Tue Aug  1 00:00:00 2017", "y": 430, "c": 0 }, { "x": 11, "date": "Mon Jul 31 00:00:00 2017", "y": 303, "c": 0 }, { "x": 12, "date": "Sun Jul 30 00:00:00 2017", "y": 128, "c": 0 }, { "x": 13, "date": "Sat Jul 29 00:00:00 2017", "y": 172, "c": 0 }, { "x": 14, "date": "Fri Jul 28 00:00:00 2017", "y": 393, "c": 0 }, { "x": 15, "date": "Thu Jul 27 00:00:00 2017", "y": 510, "c": 0 }, { "x": 16, "date": "Wed Jul 26 00:00:00 2017", "y": 482, "c": 0 }, { "x": 17, "date": "Tue Jul 25 00:00:00 2017", "y": 446, "c": 0 }, { "x": 18, "date": "Mon Jul 24 00:00:00 2017", "y": 294, "c": 0 }, { "x": 19, "date": "Sun Jul 23 00:00:00 2017", "y": 134, "c": 0 }, { "x": 20, "date": "Sat Jul 22 00:00:00 2017", "y": 167, "c": 0 }, { "x": 21, "date": "Fri Jul 21 00:00:00 2017", "y": 356, "c": 0 }, { "x": 22, "date": "Thu Jul 20 00:00:00 2017", "y": 367, "c": 0 }, { "x": 23, "date": "Wed Jul 19 00:00:00 2017", "y": 428, "c": 0 }, { "x": 24, "date": "Tue Jul 18 00:00:00 2017", "y": 353, "c": 0 }, { "x": 25, "date": "Mon Jul 17 00:00:00 2017", "y": 272, "c": 0 }, { "x": 26, "date": "Sun Jul 16 00:00:00 2017", "y": 126, "c": 0 }, { "x": 27, "date": "Sat Jul 15 00:00:00 2017", "y": 138, "c": 0 }, { "x": 28, "date": "Fri Jul 14 00:00:00 2017", "y": 383, "c": 0 }, { "x": 29, "date": "Thu Jul 13 00:00:00 2017", "y": 420, "c": 0 }, { "x": 30, "date": "Wed Jul 12 00:00:00 2017", "y": 466, "c": 0 }]
+    }],
+
+    "scales": [{
+            "name": "x",
+            "type": "point",
+            "range": "width",
+            "reverse": true,
+            "domain": { "data": "table", "field": "x" },
+            "zero": false
+        },
+        {
+            "name": "y",
+            "type": "linear",
+            "range": "height",
+            "nice": true,
+            "domain": { "data": "table", "field": "y" },
+            "zero": false
+        },
+        {
+            "name": "color",
+            "type": "ordinal",
+            "range": "category",
+            "domain": { "data": "table", "field": "c" }
+        },
+        {
+            "name": "date",
+            "type": "point",
+            "range": "width",
+            "reverse": true,
+            "domain": { "data": "table", "field": "date" },
+            "zero": false
+        },
+        {
+            "name": "dates",
+            "type": "point",
+            "range": "width",
+            "reverse": true,
+            "domain": {
+                "data": "table",
+                "field": "date"
+            },
+            "zero": false
+        }
+    ],
+
+    "axes": [{
+            "orient": "bottom",
+            "scale": "date",
+            "ticks": false,
+            "grid": true,
+            "labels": true,
+            "offset": 0,
+            "labelPadding": 20,
+            "encode": {
+                "ticks": {
+                    "update": {
+                        "stroke": { "value": "steelblue" }
+                    }
+                },
+                "labels": {
+                    "update": {
+                        "text": { "signal": "substring(datum.label, 0,3)" },
+                        "angle": { "value": -90 },
+                        "fontSize": { "value": 10 },
+                        "align": { "value": "center" },
+                        "baseline": { "value": "middle" },
+                        "dx": { "value": 0 },
+                        "dy": { "value": 0 }
+                    }
+                }
+            }
+        },
+        { "orient": "left", "scale": "y", "grid": true, "offset": 10 }
+    ],
+
+    "marks": [{
+        "type": "group",
+        "from": {
+            "facet": {
+                "name": "series",
+                "data": "table",
+                "groupby": "c"
+            }
+        },
+        "marks": [{
+                "type": "line",
+                "from": { "data": "series" },
+                "encode": {
+                    "enter": {
+                        "x": { "scale": "x", "field": "x" },
+                        "y": { "scale": "y", "field": "y" },
+                        "stroke": { "scale": "color", "field": "c" },
+                        "strokeWidth": { "value": 2 }
+                    },
+                    "update": {
+                        "interpolate": { "value": "linear" },
+                        "fillOpacity": { "value": 1 }
+                    }
+                }
+            },
+            {
+                "type": "symbol",
+                "from": { "data": "series" },
+                "encode": {
+                    "enter": {
+                        "x": { "scale": "x", "field": "x" },
+                        "y": { "scale": "y", "field": "y" }
+                    },
+                    "update": {
+                        "x": { "scale": "x", "field": "x" },
+                        "y": { "scale": "y", "field": "y" },
+                        "fill": { "value": "steelblue" },
+                        "shape": { "value": "circle" },
+                        "size": { "value": 100 },
+                        "fillOpacity": { "value": 0.5 },
+                        "zindex": { "value": 0 }
+                    },
+                    "hover": {
+                        "fill": { "value": "firebrick" },
+                        "fillOpacity": { "value": 1 },
+                        "zindex": { "value": 1 }
+                    }
+                }
+            }
+        ]
+    }]
+}
