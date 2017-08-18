@@ -1,0 +1,26 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body style="margin:0">
+    <script src="bundle.js"></script>
+
+    <div role="tabpanel" class="tab-pane" id="graph_analisys" style="height:100%;width:100%">
+
+
+        <div style="width:100%;">
+            <div style="box-sizing: border-box;width:100%;height:400px;padding:20px; display:inline-block" id="vegaGraphAnalisys"></div>
+            <div id="vis-tooltip" class="vg-tooltip"></div>
+            <div style="box-sizing: border-box;width:100%;height:100%;padding:20px; display:inline-block" id="vegaForceGraph"></div>
+            <div style="box-sizing: border-box;width:100%;height:800px;padding:20px; display:inline-block" id="vegaChordGraph"></div>
+        </div>
+
+    </div>
+</body>
+
+</html>
