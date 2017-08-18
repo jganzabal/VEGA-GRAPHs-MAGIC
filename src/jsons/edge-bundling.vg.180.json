@@ -56,7 +56,7 @@
 
     "data": [{
             "name": "tree",
-            "url": "./flare.json",
+            "url": "https://raw.githubusercontent.com/jganzabal/VEGA-GRAPHs/master/dist/jsons/flare.json",
             "transform": [{
                     "type": "stratify",
                     "key": "id",
@@ -100,7 +100,7 @@
         },
         {
             "name": "dependencies",
-            "url": "./flare-dependencies.json",
+            "url": "https://raw.githubusercontent.com/jganzabal/VEGA-GRAPHs/master/dist/jsons/flare-dependencies.json",
             "transform": [{
                 "type": "formula",
                 "expr": "treePath('tree', datum.source, datum.target)",
