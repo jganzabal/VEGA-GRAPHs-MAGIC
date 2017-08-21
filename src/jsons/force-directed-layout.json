@@ -303,10 +303,13 @@
                     "y": { "field": "y" },
                     "size": { "field": "size" },
                     "fill": { "scale": "color", "field": "datum.group" },
-                    "stroke": { "value": "white" },
+                    "stroke": [
+                        { "test": "legendHover.datum.index===datum.datum.group", "value": "black" },
+                        { "value": "white" }
+                    ],
                     "opacity": [
                         { "test": "legendHover.datum.index===datum.datum.group", "value": 1 },
-                        { "value": 0.3 }
+                        { "value": 1 }
                     ]
                 }
             }
@@ -325,7 +328,9 @@
                     "align": { "value": "center" },
                     "baseline": { "value": "bottom" },
                     "text": { "field": "datum.last" },
-                    "fontSize": { "field": "datum.fontSize" },
+                    "fontSize": [
+                        { "field": "datum.fontSize" }
+                    ],
                     "opacity": { "value": 1 }
                 }
             }
@@ -342,7 +347,9 @@
                     "align": { "value": "center" },
                     "baseline": { "value": "bottom" },
                     "text": { "field": "datum.first" },
-                    "fontSize": { "field": "datum.fontSize" },
+                    "fontSize": [
+                        { "field": "datum.fontSize" }
+                    ],
                     "opacity": { "value": 1 }
                 }
             }
@@ -353,11 +360,13 @@
             "from": { "data": "nodes" },
             "encode": {
                 "update": {
-                    "x": { "signal": "tooltip.x" },
-                    "y": { "signal": "tooltip.y" },
-                    "baseline": { "value": "middle" },
-                    "align": { "value": "center" },
-                    "url": { "signal": "tooltip.datum.thumb" },
+                    "_x": { "signal": "tooltip.x" },
+                    "_y": { "signal": "tooltip.y" },
+                    "x": { "signal": "20" },
+                    "y": { "signal": "20" },
+                    "baseline": { "value": "top" },
+                    "align": { "value": "left" },
+                    "url": { "signal": "replace(tooltip.datum.thumb, regexp('\/([0-9]+)px'), '/200px')" },
                     "fontSize": { "value": 25 },
                     "opacity": [
                         { "test": "tooltip.datum.name", "value": 1 },

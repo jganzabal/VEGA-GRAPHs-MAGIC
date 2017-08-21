@@ -14,7 +14,7 @@ import * as $ from 'jquery'
 window.$ = $
 
 window.onload = function() {
-    vegaHelper.addVgExample("#vegaGraphAnalisys", linearvgSpec, true);
+    //vegaHelper.addVgExample("#vegaGraphAnalisys", linearvgSpec, true);
     vegaHelper.addVgExample("#vegaForceGraph", forceVGSpec, true);
-    vegaHelper.addVgExample("#vegaChordGraph", chordVGSpec, true);
+    //vegaHelper.addVgExample("#vegaChordGraph", chordVGSpec, true);
 };
