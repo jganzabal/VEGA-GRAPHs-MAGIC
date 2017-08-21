@@ -168,9 +168,9 @@ export default {
         };
 
         var options = {
-            showAllFields: true
-        }
-        vegaTooltip.vega(view, options);
+                showAllFields: true
+            }
+            //vegaTooltip.vega(view, options);
         window.VEGA_DEBUG = view
     }
 }

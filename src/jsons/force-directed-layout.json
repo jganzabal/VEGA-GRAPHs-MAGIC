@@ -5,7 +5,10 @@
     "padding": 0,
     "autosize": "none",
 
-    "signals": [{
+    "signals": [
+        { "name": "xrange", "update": "[maxNodeSize, width-maxNodeSize]" },
+        { "name": "yrange", "update": "[height, 0]" },
+        {
             "name": "tooltip",
             "value": { "datum": {} },
             "on": [{
@@ -49,6 +52,11 @@
         { "name": "maxNodeSize", "update": "0" },
         { "name": "cx", "update": "width / 2" },
         { "name": "cy", "update": "height / 2" },
+        {
+            "name": "sistemAngle",
+            "value": 0,
+            "bind": { "input": "range", "min": 0.0, "max": 1.0, "step": 0.05 }
+        },
         {
             "name": "ellipseXRadius",
             "value": 0.15,
@@ -151,7 +159,7 @@
                 "sort": true
             },
 
-            "range": [{ "signal": "maxNodeSize" }, { "signal": "width-maxNodeSize" }]
+            "range": { "signal": "xrange" }
         },
         {
             "name": "yscale",
@@ -164,7 +172,7 @@
                 "sort": false
             },
             "reverse": true,
-            "range": "height"
+            "range": { "signal": "yrange" }
         }
     ],
     "legends": [{
@@ -277,12 +285,6 @@
             "from": { "data": "link-data" },
             "zindex": 0,
             "interactive": false,
-            "encode": {
-                "update": {
-                    "stroke": { "value": "#ccc" },
-                    "strokeWidth": { "value": 0.5 }
-                }
-            },
             "transform": [{
                 "type": "linkpath",
                 "shape": "line",
@@ -290,7 +292,16 @@
                 "sourceY": "datum.source.y",
                 "targetX": "datum.target.x",
                 "targetY": "datum.target.y"
-            }]
+            }],
+            "encode": {
+                "update": {
+                    "stroke": { "value": "#ccc" },
+                    "strokeWidth": [
+                        { "test": "datum.source.datum==tooltip.datum", "value": 1 },
+                        { "value": 0.1 }
+                    ]
+                }
+            }
         },
         {
             "name": "visibleNodes",
@@ -309,10 +320,14 @@
                     ],
                     "opacity": [
                         { "test": "legendHover.datum.index===datum.datum.group", "value": 1 },
-                        { "value": 1 }
+                        { "value": 0.5 }
                     ]
                 }
-            }
+            },
+            "transform": [
+                { "type": "extent", "field": "x", "signal": "xext" },
+                { "type": "extent", "field": "y", "signal": "yext" }
+            ]
         },
         {
             "name": "lastName",
