@@ -9,6 +9,67 @@
         { "name": "xrange", "update": "[maxNodeSize, width-maxNodeSize]" },
         { "name": "yrange", "update": "[height, 0]" },
         {
+            "name": "down",
+            "value": null,
+            "on": [
+                { "events": "touchend", "update": "null" },
+                { "events": "mousedown, touchstart", "update": "xy()" }
+            ]
+        },
+        {
+            "name": "ydom",
+            "update": "[-1,1]",
+            "react": false,
+            "on": [{
+                "events": { "signal": "delta" },
+                "update": "[ycur[0] - span(ycur) * delta[1] / height, ycur[1] - span(ycur) * delta[1] / height]"
+            }]
+        },
+        {
+            "name": "xdom",
+            "update": "[-1,1]",
+            "react": false,
+            "on": [{
+                "events": { "signal": "delta" },
+                "update": "[xcur[0] + span(xcur) * delta[0] / width, xcur[1] + span(xcur) * delta[0] / width]"
+            }]
+        },
+        {
+            "name": "xcur",
+            "value": null,
+            "on": [{
+                "events": "mousedown, touchstart, touchend",
+                "update": "slice(xdom)"
+            }]
+        },
+        {
+            "name": "ycur",
+            "value": null,
+            "on": [{
+                "events": "mousedown, touchstart, touchend",
+                "update": "slice(ydom)"
+            }]
+        },
+        {
+            "name": "delta",
+            "value": [0, 0],
+            "on": [{
+                "events": [{
+                        "source": "window",
+                        "type": "mousemove",
+                        "consume": true,
+                        "between": [{ "type": "mousedown" }, { "source": "window", "type": "mouseup" }]
+                    },
+                    {
+                        "type": "touchmove",
+                        "consume": true,
+                        "filter": "event.touches.length === 1"
+                    }
+                ],
+                "update": "down ? [down[0]-x(), y()-down[1]] : [0,0]"
+            }]
+        },
+        {
             "name": "tooltip",
             "value": { "datum": {} },
             "on": [{
@@ -128,7 +189,11 @@
     "data": [{
             "name": "node-data",
             "url": "https://raw.githubusercontent.com/jganzabal/VEGA-GRAPHs/master/dist/jsons/entity-people-force.1.json",
-            "format": { "type": "json", "property": "nodes" }
+            "format": { "type": "json", "property": "nodes" },
+            "transform": [
+                { "type": "extent", "field": "x", "signal": "xext" },
+                { "type": "extent", "field": "relY", "signal": "yext" }
+            ]
         },
         {
             "name": "link-data",
@@ -151,26 +216,15 @@
         {
             "name": "xscale",
             "type": "linear",
-            "domainMin": -1,
-            "domainMax": 1,
-            "domain": {
-                "data": "node-data",
-                "field": "relX",
-                "sort": true
-            },
-
+            "zero": false,
+            "domain": { "signal": "xdom" },
             "range": { "signal": "xrange" }
         },
         {
             "name": "yscale",
             "type": "linear",
-            "domainMin": -1,
-            "domainMax": 1,
-            "domain": {
-                "data": "node-data",
-                "field": "relY",
-                "sort": false
-            },
+            "zero": false,
+            "domain": { "signal": "ydom" },
             "reverse": true,
             "range": { "signal": "yrange" }
         }
@@ -249,6 +303,8 @@
                     "stroke": { "value": "white" }
                 },
                 "update": {
+                    "xfocus": { "scale": "xscale", "field": "relX" },
+                    "yfocus": { "scale": "yscale", "field": "relY" },
                     "size": { "field": "size" },
                     "cursor": { "value": "pointer" },
                     "opacity": { "value": 0 }
@@ -256,29 +312,18 @@
             },
 
             "transform": [{
-                    "type": "force",
-                    "iterations": 300,
-                    "restart": { "signal": "restart" },
-                    "static": { "signal": "static" },
-                    "forces": [
-                        { "force": "collide", "radius": { "signal": "nodeRadius" } },
-                        { "force": "nbody", "strength": { "signal": "nodeCharge" }, "distanceMax": 80 },
-                        { "force": "link", "links": "link-data", "distance": { "signal": "linkDistance" } },
-                        { "force": "x", "x": "xfocus", "strength": 0.25 },
-                        { "force": "y", "y": "yfocus", "strength": 0.25 }
-                    ]
-                },
-                {
-                    "type": "formula",
-                    "as": "fx",
-                    "expr": "datum.datum.fix ? (width/2 + ellipseXRadius*cos(2*PI*datum.datum.relAngle)*(width - 2*maxNodeSize) ) : null"
-                },
-                {
-                    "type": "formula",
-                    "as": "fy",
-                    "expr": "datum.datum.fix ? (height/2 + ellipseYRadius*sin(2*PI*datum.datum.relAngle)*(height - 2*maxNodeSize) )  : null"
-                }
-            ]
+                "type": "force",
+                "iterations": 300,
+                "restart": { "signal": "restart" },
+                "static": { "signal": "static" },
+                "forces": [
+                    { "force": "collide", "radius": { "signal": "nodeRadius" } },
+                    { "force": "nbody", "strength": { "signal": "nodeCharge" }, "distanceMax": 80 },
+                    { "force": "link", "links": "link-data", "distance": { "signal": "linkDistance" } },
+                    { "force": "x", "x": "xfocus", "strength": 0.25 },
+                    { "force": "y", "y": "yfocus", "strength": 0.25 }
+                ]
+            }]
         },
         {
             "type": "path",
@@ -323,11 +368,7 @@
                         { "value": 0.5 }
                     ]
                 }
-            },
-            "transform": [
-                { "type": "extent", "field": "x", "signal": "xext" },
-                { "type": "extent", "field": "y", "signal": "yext" }
-            ]
+            }
         },
         {
             "name": "lastName",
